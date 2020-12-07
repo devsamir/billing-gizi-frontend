@@ -1,17 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
+import React from "react";
+import ReactDOM from "react-dom";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./index.css";
+import App from "./App";
+import theme from "./styles/theme";
+import { AuthProvider } from "./context/authContext";
+import { UserProvider } from "./context/userContext";
+import { KamarProvider } from "./context/kamarContext";
+import { MenuProvider } from "./context/menuContext";
+import { PesananProvider } from "./context/pesananContext";
+import { BillingProvider } from "./context/billingContext";
+import { RiwayatProvider } from "./context/riwayatContext";
+import { GiziProvider } from "./context/giziContext";
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <Router>
+    <AuthProvider>
+      <UserProvider>
+        <KamarProvider>
+          <MenuProvider>
+            <PesananProvider>
+              <BillingProvider>
+                <RiwayatProvider>
+                  <GiziProvider>
+                    <ThemeProvider theme={theme}>
+                      <App />
+                    </ThemeProvider>
+                  </GiziProvider>
+                </RiwayatProvider>
+              </BillingProvider>
+            </PesananProvider>
+          </MenuProvider>
+        </KamarProvider>
+      </UserProvider>
+    </AuthProvider>
+  </Router>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
