@@ -1,5 +1,11 @@
-import React, { createContext, useReducer, useCallback } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useCallback,
+  useContext,
+} from "react";
 import axios from "../utils/myAxios";
+import { BadgeContext } from "./badgeContext";
 
 const BillingContext = createContext();
 // CONSTANTS
@@ -24,11 +30,24 @@ const billingReducer = (state, action) => {
     case BILLING_GET_DETAIL_ONE_SUCCESS:
       return { ...state, loading: false, detail: action.payload };
     case BILLING_UPDATE_SUDAH_SUCCESS:
-      return { ...state, loading: false, message: "Berhasil Update Status Billing Menjadi Sudah Dibayar" };
+      return {
+        ...state,
+        loading: false,
+        message: "Berhasil Update Status Billing Menjadi Sudah Dibayar",
+      };
     case BILLING_UPDATE_BELUM_SUCCESS:
-      return { ...state, loading: false, message: "Berhasil Update Status Billing Menjadi Belum Dibayar" };
+      return {
+        ...state,
+        loading: false,
+        message: "Berhasil Update Status Billing Menjadi Belum Dibayar",
+      };
     case BILLING_ERROR:
-      return { ...state, loading: false, error: action.payload, data: undefined };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        data: undefined,
+      };
     case BILLING_CLEAR_MESSAGE:
       return { ...state, message: undefined };
     case BILLING_CLEAR_ERROR:
@@ -39,6 +58,7 @@ const billingReducer = (state, action) => {
 };
 
 const BillingProvider = ({ children }) => {
+  const { getBadge } = useContext(BadgeContext);
   const [billingState, dispatch] = useReducer(billingReducer, initialState);
   const getOneBilling = useCallback(async (noRawat) => {
     try {
@@ -48,7 +68,10 @@ const BillingProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: BILLING_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -60,7 +83,10 @@ const BillingProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: BILLING_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -69,10 +95,14 @@ const BillingProvider = ({ children }) => {
       dispatch({ type: BILLING_LOADING });
       await axios.patch(`/api/billing/sudah`, { pesanan, tanggalBayar });
       dispatch({ type: BILLING_UPDATE_SUDAH_SUCCESS });
+      getBadge();
     } catch (err) {
       dispatch({
         type: BILLING_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);

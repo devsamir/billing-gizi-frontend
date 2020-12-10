@@ -1,5 +1,11 @@
-import React, { createContext, useReducer, useCallback } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useCallback,
+  useContext,
+} from "react";
 import axios from "../utils/myAxios";
+import { BadgeContext } from "./badgeContext";
 
 const RiwayatContext = createContext();
 // CONSTANTS
@@ -37,23 +43,36 @@ const riwayatReducer = (state, action) => {
   }
 };
 const RiwayatProvider = ({ children }) => {
+  const { getBadge } = useContext(BadgeContext);
   const [riwayatState, dispatch] = useReducer(riwayatReducer, initialState);
-  const getRiwayat = useCallback(async (page = 1, limit = 25, sort = { field: "tanggal", sort: "desc" }, search) => {
-    try {
-      dispatch({ type: RIWAYAT_LOADING });
-      const { data } = await axios.get(
-        `/api/riwayat?page=${page}&limit=${limit}${search ? `&search=${search}` : ""}${
-          sort ? `&sort[${sort.field}]=${sort.sort}` : ""
-        }`
-      );
-      dispatch({ type: RIWAYAT_GET_ALL_SUCCESS, payload: data });
-    } catch (err) {
-      dispatch({
-        type: RIWAYAT_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
-      });
-    }
-  }, []);
+  const getRiwayat = useCallback(
+    async (
+      page = 1,
+      limit = 25,
+      sort = { field: "tanggal", sort: "desc" },
+      search
+    ) => {
+      try {
+        dispatch({ type: RIWAYAT_LOADING });
+        const { data } = await axios.get(
+          `/api/riwayat?page=${page}&limit=${limit}${
+            search ? `&search=${search}` : ""
+          }${sort ? `&sort[${sort.field}]=${sort.sort}` : ""}`
+        );
+        dispatch({ type: RIWAYAT_GET_ALL_SUCCESS, payload: data });
+        getBadge();
+      } catch (err) {
+        dispatch({
+          type: RIWAYAT_ERROR,
+          payload:
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message,
+        });
+      }
+    },
+    []
+  );
   const getOneRiwayat = useCallback(async (id) => {
     try {
       dispatch({ type: RIWAYAT_LOADING });
@@ -62,7 +81,10 @@ const RiwayatProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: RIWAYAT_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -74,7 +96,10 @@ const RiwayatProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: RIWAYAT_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -86,7 +111,10 @@ const RiwayatProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: RIWAYAT_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);

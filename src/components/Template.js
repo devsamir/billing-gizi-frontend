@@ -11,12 +11,21 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
+import Badge from "@material-ui/core/Badge";
 import { Link } from "react-router-dom";
-import { FaBed, FaUserCog, FaListAlt, FaUtensils, FaMoneyCheckAlt, FaHistory } from "react-icons/fa";
+import {
+  FaBed,
+  FaUserCog,
+  FaListAlt,
+  FaUtensils,
+  FaMoneyCheckAlt,
+  FaHistory,
+} from "react-icons/fa";
 import { Button, Container } from "@material-ui/core";
 import { MdMenu, MdKeyboardArrowLeft, MdDashboard } from "react-icons/md";
 import useStyles from "../styles/templateStyle";
 import { AuthContext } from "../context/authContext";
+import { BadgeContext } from "../context/badgeContext";
 
 function Template({ children, active }) {
   // GLOBAL STATE
@@ -24,6 +33,9 @@ function Template({ children, active }) {
     authState: { userData },
     logout,
   } = useContext(AuthContext);
+  const {
+    badgeState: { badge },
+  } = useContext(BadgeContext);
   // LOCAL
   const [open, setOpen] = useState(true);
   const classes = useStyles();
@@ -50,14 +62,20 @@ function Template({ children, active }) {
             <Typography variant="h6" className={classes.navBrand}>
               Sistem Billing Gizi
             </Typography>
-            <Button style={{ color: "white", fontSize: "1rem", marginLeft: "auto" }} onClick={logout}>
+            <Button
+              style={{ color: "white", fontSize: "1rem", marginLeft: "auto" }}
+              onClick={logout}
+            >
               Logout
             </Button>
           </Toolbar>
         </AppBar>
         <div className={classes.toolbarMixins}></div>
         <Drawer variant="persistent" anchor="left" open={open}>
-          <IconButton onClick={handleDrawerClose} className={classes.closeDrawer}>
+          <IconButton
+            onClick={handleDrawerClose}
+            className={classes.closeDrawer}
+          >
             <MdKeyboardArrowLeft />
             <Typography variant="button">Hide</Typography>
           </IconButton>
@@ -70,8 +88,12 @@ function Template({ children, active }) {
             <>
               <Divider />
               <div className={classes.avatarContainer}>
-                <Avatar className={classes.avatar}>{userData.name.split("")[0]}</Avatar>
-                <span className={classes.avatarName}>Hallo {userData.name} !</span>
+                <Avatar className={classes.avatar}>
+                  {userData.name.split("")[0]}
+                </Avatar>
+                <span className={classes.avatarName}>
+                  Hallo {userData.name} !
+                </span>
               </div>
             </>
           )}
@@ -80,89 +102,156 @@ function Template({ children, active }) {
             {userData && (
               <ListItem
                 button
-                className={clsx(classes.sidebar, active === "dashboard" && classes.sidebarActive)}
+                className={clsx(
+                  classes.sidebar,
+                  active === "dashboard" && classes.sidebarActive
+                )}
                 component={Link}
                 to={"/admin/dashboard"}
               >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "dashboard" && classes.iconActive)}>
+                <ListItemIcon
+                  className={clsx(
+                    classes.pasienIcon,
+                    active === "dashboard" && classes.iconActive
+                  )}
+                >
                   <MdDashboard />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItem>
             )}
-            {userData && (userData.role === "admin" || userData.role === "gizi") && (
-              <ListItem
-                button
-                className={clsx(classes.sidebar, active === "pesanan" && classes.sidebarActive)}
-                component={Link}
-                to={"/admin/pesanan"}
-              >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "pesanan" && classes.iconActive)}>
-                  <FaUtensils />
-                </ListItemIcon>
-                <ListItemText primary="Pesanan" />
-              </ListItem>
-            )}
-            {userData && (userData.role === "admin" || userData.role === "keuangan") && (
-              <ListItem
-                button
-                className={clsx(classes.sidebar, active === "billing" && classes.sidebarActive)}
-                component={Link}
-                to={"/admin/billing"}
-              >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "billing" && classes.iconActive)}>
-                  <FaMoneyCheckAlt />
-                </ListItemIcon>
-                <ListItemText primary="Billing" />
-              </ListItem>
-            )}
-            {userData && (userData.role === "admin" || userData.role === "gizi") && (
-              <ListItem
-                button
-                className={clsx(classes.sidebar, active === "kamar" && classes.sidebarActive)}
-                component={Link}
-                to={"/admin/kamar"}
-              >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "kamar" && classes.iconActive)}>
-                  <FaBed />
-                </ListItemIcon>
-                <ListItemText primary="Kamar" />
-              </ListItem>
-            )}
-            {userData && (userData.role === "admin" || userData.role === "gizi") && (
-              <ListItem
-                button
-                className={clsx(classes.sidebar, active === "menu" && classes.sidebarActive)}
-                component={Link}
-                to={"/admin/menu"}
-              >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "menu" && classes.iconActive)}>
-                  <FaListAlt />
-                </ListItemIcon>
-                <ListItemText primary="Set Menu" />
-              </ListItem>
-            )}
-            {userData && (userData.role === "admin" || userData.role === "gizi" || userData.role === "keuangan") && (
-              <ListItem
-                button
-                className={clsx(classes.sidebar, active === "riwayat" && classes.sidebarActive)}
-                component={Link}
-                to={"/admin/riwayat"}
-              >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "riwayat" && classes.iconActive)}>
-                  <FaHistory />
-                </ListItemIcon>
-                <ListItemText primary="Riwayat Billing" />
-              </ListItem>
-            )}
+            {userData &&
+              (userData.role === "admin" || userData.role === "gizi") && (
+                <ListItem
+                  button
+                  className={clsx(
+                    classes.sidebar,
+                    active === "pesanan" && classes.sidebarActive
+                  )}
+                  component={Link}
+                  to={"/admin/pesanan"}
+                >
+                  <ListItemIcon
+                    className={clsx(
+                      classes.pasienIcon,
+                      active === "pesanan" && classes.iconActive
+                    )}
+                  >
+                    <Badge badgeContent={badge?.pesanan || 0} color="secondary">
+                      <FaUtensils />
+                    </Badge>
+                  </ListItemIcon>
+                  <ListItemText primary="Pesanan" />
+                </ListItem>
+              )}
+            {userData &&
+              (userData.role === "admin" || userData.role === "keuangan") && (
+                <ListItem
+                  button
+                  className={clsx(
+                    classes.sidebar,
+                    active === "billing" && classes.sidebarActive
+                  )}
+                  component={Link}
+                  to={"/admin/billing"}
+                >
+                  <ListItemIcon
+                    className={clsx(
+                      classes.pasienIcon,
+                      active === "billing" && classes.iconActive
+                    )}
+                  >
+                    <Badge badgeContent={badge?.billing || 0} color="secondary">
+                      <FaMoneyCheckAlt />
+                    </Badge>
+                  </ListItemIcon>
+                  <ListItemText primary="Billing" />
+                </ListItem>
+              )}
+            {userData &&
+              (userData.role === "admin" || userData.role === "gizi") && (
+                <ListItem
+                  button
+                  className={clsx(
+                    classes.sidebar,
+                    active === "kamar" && classes.sidebarActive
+                  )}
+                  component={Link}
+                  to={"/admin/kamar"}
+                >
+                  <ListItemIcon
+                    className={clsx(
+                      classes.pasienIcon,
+                      active === "kamar" && classes.iconActive
+                    )}
+                  >
+                    <FaBed />
+                  </ListItemIcon>
+                  <ListItemText primary="Kamar" />
+                </ListItem>
+              )}
+            {userData &&
+              (userData.role === "admin" || userData.role === "gizi") && (
+                <ListItem
+                  button
+                  className={clsx(
+                    classes.sidebar,
+                    active === "menu" && classes.sidebarActive
+                  )}
+                  component={Link}
+                  to={"/admin/menu"}
+                >
+                  <ListItemIcon
+                    className={clsx(
+                      classes.pasienIcon,
+                      active === "menu" && classes.iconActive
+                    )}
+                  >
+                    <FaListAlt />
+                  </ListItemIcon>
+                  <ListItemText primary="Set Menu" />
+                </ListItem>
+              )}
+            {userData &&
+              (userData.role === "admin" ||
+                userData.role === "gizi" ||
+                userData.role === "keuangan") && (
+                <ListItem
+                  button
+                  className={clsx(
+                    classes.sidebar,
+                    active === "riwayat" && classes.sidebarActive
+                  )}
+                  component={Link}
+                  to={"/admin/riwayat"}
+                >
+                  <ListItemIcon
+                    className={clsx(
+                      classes.pasienIcon,
+                      active === "riwayat" && classes.iconActive
+                    )}
+                  >
+                    <FaHistory />
+                  </ListItemIcon>
+                  <ListItemText primary="Riwayat Billing" />
+                </ListItem>
+              )}
             {userData && userData.role === "admin" && (
               <ListItem
                 button
-                className={clsx(classes.sidebar, active === "user" && classes.sidebarActive)}
+                className={clsx(
+                  classes.sidebar,
+                  active === "user" && classes.sidebarActive
+                )}
                 component={Link}
                 to={"/admin/user"}
               >
-                <ListItemIcon className={clsx(classes.pasienIcon, active === "user" && classes.iconActive)}>
+                <ListItemIcon
+                  className={clsx(
+                    classes.pasienIcon,
+                    active === "user" && classes.iconActive
+                  )}
+                >
                   <FaUserCog />
                 </ListItemIcon>
                 <ListItemText primary="User Setting" />

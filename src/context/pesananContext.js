@@ -1,6 +1,13 @@
-import React, { createContext, useReducer, useCallback, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useCallback,
+  useEffect,
+  useContext,
+} from "react";
 import axios from "../utils/myAxios";
 import { AuthContext } from "./authContext";
+import { BadgeContext } from "./badgeContext";
 
 const PesananContext = createContext();
 // CONSTANT
@@ -30,7 +37,11 @@ const pesananReducer = (state, action) => {
     case PESANAN_UPDATE_SUCCESS:
       return { ...state, message: "Berhasil Update Pesanan", loading: false };
     case PESANAN_UPDATE_TERLAYANI_SUCCESS:
-      return { ...state, message: "Berhasil Update Status Pesanan Menjadi Terlayani", loading: false };
+      return {
+        ...state,
+        message: "Berhasil Update Status Pesanan Menjadi Terlayani",
+        loading: false,
+      };
     case PESANAN_DELETE_SUCCESS:
       return { ...state, message: "Berhasil Hapus Pesanan", loading: false };
     case PESANAN_ERROR:
@@ -44,16 +55,21 @@ const pesananReducer = (state, action) => {
   }
 };
 const PesananProvider = ({ children }) => {
+  const { getBadge } = useContext(BadgeContext);
   const [pesananState, dispatch] = useReducer(pesananReducer, initialState);
   const getAllPesanan = useCallback(async () => {
     try {
       dispatch({ type: PESANAN_LOADING });
       const { data } = await axios.get("/api/billing/belum");
       dispatch({ type: PESANAN_GET_DATA_SUCCESS, payload: data });
+      getBadge();
     } catch (err) {
       dispatch({
         type: PESANAN_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -65,7 +81,10 @@ const PesananProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: PESANAN_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
@@ -76,10 +95,14 @@ const PesananProvider = ({ children }) => {
         await axios.post("/api/billing", body);
         dispatch({ type: PESANAN_CREATE_SUCCESS });
         getAllPesanan();
+        getBadge();
       } catch (err) {
         dispatch({
           type: PESANAN_ERROR,
-          payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+          payload:
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message,
         });
       }
     },
@@ -95,7 +118,10 @@ const PesananProvider = ({ children }) => {
       } catch (err) {
         dispatch({
           type: PESANAN_ERROR,
-          payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+          payload:
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message,
         });
       }
     },
@@ -105,13 +131,20 @@ const PesananProvider = ({ children }) => {
     async (pesanan, tanggalTerlayani) => {
       try {
         dispatch({ type: PESANAN_LOADING });
-        await axios.patch(`/api/billing/terlayani`, { pesanan, tanggalTerlayani });
+        await axios.patch(`/api/billing/terlayani`, {
+          pesanan,
+          tanggalTerlayani,
+        });
         dispatch({ type: PESANAN_UPDATE_TERLAYANI_SUCCESS });
         getAllPesanan();
+        getBadge();
       } catch (err) {
         dispatch({
           type: PESANAN_ERROR,
-          payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+          payload:
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message,
         });
       }
     },
@@ -127,7 +160,10 @@ const PesananProvider = ({ children }) => {
       } catch (err) {
         dispatch({
           type: PESANAN_ERROR,
-          payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+          payload:
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message,
         });
       }
     },

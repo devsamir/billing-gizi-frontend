@@ -13,26 +13,29 @@ import { PesananProvider } from "./context/pesananContext";
 import { BillingProvider } from "./context/billingContext";
 import { RiwayatProvider } from "./context/riwayatContext";
 import { GiziProvider } from "./context/giziContext";
+import { BadgeProvider } from "./context/badgeContext";
 ReactDOM.render(
   <Router>
     <AuthProvider>
-      <UserProvider>
-        <KamarProvider>
-          <MenuProvider>
-            <PesananProvider>
-              <BillingProvider>
-                <RiwayatProvider>
-                  <GiziProvider>
-                    <ThemeProvider theme={theme}>
-                      <App />
-                    </ThemeProvider>
-                  </GiziProvider>
-                </RiwayatProvider>
-              </BillingProvider>
-            </PesananProvider>
-          </MenuProvider>
-        </KamarProvider>
-      </UserProvider>
+      <BadgeProvider>
+        <UserProvider>
+          <KamarProvider>
+            <MenuProvider>
+              <PesananProvider>
+                <BillingProvider>
+                  <RiwayatProvider>
+                    <GiziProvider>
+                      <ThemeProvider theme={theme}>
+                        <App />
+                      </ThemeProvider>
+                    </GiziProvider>
+                  </RiwayatProvider>
+                </BillingProvider>
+              </PesananProvider>
+            </MenuProvider>
+          </KamarProvider>
+        </UserProvider>
+      </BadgeProvider>
     </AuthProvider>
   </Router>,
   document.getElementById("root")

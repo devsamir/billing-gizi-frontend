@@ -20,7 +20,12 @@ const giziReducer = (state, action) => {
     case GIZI_LOADING:
       return { ...state, loading: true };
     case GIZI_ERROR:
-      return { ...state, loading: false, error: action.payload, data: undefined };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        data: undefined,
+      };
     case GIZI_OVERVIEW_SUCCESS:
       return { ...state, loading: false, overview: action.payload };
     case GIZI_COUNT_AREA_SUCCESS:
@@ -48,43 +53,64 @@ const GiziProvider = ({ children }) => {
     } catch (err) {
       dispatch({
         type: GIZI_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
   const getDataCountArea = useCallback(async (body) => {
     try {
       dispatch({ type: GIZI_LOADING });
-      const { data } = await axios.post(`/api/dashboard/gizi/pesanan-count`, body);
+      const { data } = await axios.post(
+        `/api/dashboard/gizi/pesanan-count`,
+        body
+      );
       dispatch({ type: GIZI_COUNT_AREA_SUCCESS, payload: data });
     } catch (err) {
       dispatch({
         type: GIZI_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
   const getDataCountFavorit = useCallback(async (body) => {
     try {
       dispatch({ type: GIZI_LOADING });
-      const { data } = await axios.post(`/api/dashboard/gizi/menu-favorit`, body);
+      const { data } = await axios.post(
+        `/api/dashboard/gizi/menu-favorit`,
+        body
+      );
       dispatch({ type: GIZI_COUNT_FAVORIT_SUCCESS, payload: data });
     } catch (err) {
       dispatch({
         type: GIZI_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
   const getDataCountKamar = useCallback(async (body) => {
     try {
       dispatch({ type: GIZI_LOADING });
-      const { data } = await axios.post(`/api/dashboard/gizi/ruangan-terbanyak`, body);
+      const { data } = await axios.post(
+        `/api/dashboard/gizi/ruangan-terbanyak`,
+        body
+      );
       dispatch({ type: GIZI_COUNT_KAMAR_SUCCESS, payload: data });
     } catch (err) {
       dispatch({
         type: GIZI_ERROR,
-        payload: err.response && err.response.data.message ? err.response.data.message : err.message,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
       });
     }
   }, []);
